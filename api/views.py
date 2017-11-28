@@ -18,7 +18,7 @@ class AuthView(APIView):
         username = request.data.get("username")
         password = request.data.get("password")
         # password = common.hash_str(username,password)
-        user_obj = models.User.objects.filter(username=username,password=password).first()
+        user_obj = models.Account.objects.filter(username=username,password=password).first()
         if not user_obj:
             response['status']=False
             response['msg']="用户名或密码错误"
@@ -58,15 +58,23 @@ def test(request):
 class CourseView(APIView):
 
     def get(self,request,*args,**kwargs):
-        pk = kwargs.get('pk')
-        if pk:
-            course_detail_obj = models.CourseDetail.objects.filter(course_id=pk).first()
-            ser = CourseDetailSerialize(instance=course_detail_obj,many=False)
-        else:
-            course_list = models.Course.objects.all()
-            ser = CourseSerialize(instance=course_list,many=True,context={'request': request})
-        # print(ser.data)
-        return Response(ser.data)
+        response = {'code':1000,'msg':None,'data':None}
+        try:
+            pk = kwargs.get('pk')
+            if pk:
+                course_detail_obj = models.CourseDetail.objects.filter(course_id=pk).first()
+                ser = CourseDetailSerialize(instance=course_detail_obj,many=False)
+            else:
+                course_list = models.Course.objects.all()
+                ser = CourseSerialize(instance=course_list,many=True,context={'request': request})
+            # print(ser.data)
+            response['data']=ser.data
+        except Exception as e:
+            response['code']=1001
+            response['msg']='课程详情获取失败,请检查日志'
+            print(str(e))
+
+        return Response(response)
 
 
 

@@ -97,6 +97,9 @@ class Course(models.Model):
     # 用于GenericForeignKey反向查询，不会生成表字段，切勿删除
     price_policy = GenericRelation("PricePolicy")
 
+    # 用于GenericForeignKey反向查询，不会生成表字段，切勿删除 #add by yang
+    questions = GenericRelation("OftenAskedQuestion")
+
     def __str__(self):
         return "%s(%s)" % (self.name, self.get_course_type_display())
 
@@ -896,6 +899,7 @@ class Account(models.Model):
 
     memo = models.TextField('备注', blank=True, null=True, default=None)
     date_joined = models.DateTimeField(auto_now_add=True, verbose_name="注册时间")
+    roles=models.ManyToManyField(to=Role,verbose_name='rbac角色')# 指的是rbac角色 add by yang
 
     class Meta:
         verbose_name = '账户信息'
@@ -947,6 +951,7 @@ class City(models.Model):
 class Industry(models.Model):
     """
     行业表
+ 
     """
     code = models.IntegerField(verbose_name="行业代码", unique=True)
     name = models.CharField(max_length=64, verbose_name="行业名称")
@@ -998,7 +1003,7 @@ class Feedback(models.Model):
 
 # ---------------------------add by yang-----------------------------
 class Token(models.Model):
-    user = models.ForeignKey("User",verbose_name="用户")
+    user = models.ForeignKey("Account",verbose_name="用户")
     tk = models.CharField("token",max_length=64)
 
 class User(models.Model):
