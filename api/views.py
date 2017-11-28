@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from repository import models
 from utils import common
-from .utils.serialize import CourseSerialize
+from .utils.serialize import CourseSerialize,CourseDetailSerialize
 
 
 class AuthView(APIView):
@@ -58,18 +58,16 @@ def test(request):
 class CourseView(APIView):
 
     def get(self,request,*args,**kwargs):
-        course_list = models.Course.objects.all()
-        ser = CourseSerialize(instance=course_list,many=True,context={'request': request})
+        pk = kwargs.get('pk')
+        if pk:
+            course_detail_obj = models.CourseDetail.objects.filter(course_id=pk).first()
+            ser = CourseDetailSerialize(instance=course_detail_obj,many=False)
+        else:
+            course_list = models.Course.objects.all()
+            ser = CourseSerialize(instance=course_list,many=True,context={'request': request})
         # print(ser.data)
         return Response(ser.data)
 
-
-class CourseDetailView(APIView):
-    def get(self, request, *args, **kwargs):
-        pk = kwargs.get("pk")
-        course_obj = models.Course.objects.filter(pk=pk).first()
-        course_detail_obj = course_obj.coursedetail
-        # print(course_detail_obj)
 
 
 

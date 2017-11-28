@@ -15,4 +15,6 @@ class CourseSerialize(serializers.ModelSerializer):
 
 class CourseDetailSerialize(serializers.ModelSerializer):
     """课程详情序列化"""
-    pass
+    class Meta:
+        model=models.CourseDetail
+        fields=['']

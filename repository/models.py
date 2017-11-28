@@ -83,7 +83,7 @@ class Course(models.Model):
     course_type = models.SmallIntegerField(choices=course_type_choices)
     degree_course = models.ForeignKey("DegreeCourse", blank=True, null=True, help_text="若是学位课程，此处关联学位表")
 
-    brief = models.TextField(verbose_name="课程概述", max_length=2048,null=True,blank=True)
+    brief = models.TextField(verbose_name="课程简介", max_length=2048,null=True,blank=True)
     level_choices = ((0, '初级'), (1, '中级'), (2, '高级'))
     level = models.SmallIntegerField(choices=level_choices, default=1)
     pub_date = models.DateField(verbose_name="发布日期", blank=True, null=True)
@@ -114,6 +114,7 @@ class CourseDetail(models.Model):
     course_slogan = models.CharField('课程口号',max_length=125, blank=True, null=True)
     video_brief_link = models.CharField(verbose_name='课程介绍(视频id用来生成链接)', max_length=255,
                                         blank=True, null=True)
+    summary = models.TextField(verbose_name="课程概述",null=True,blank=True) #add by yang
     why_study = models.TextField(verbose_name="为什么学习这门课程")
     what_to_study_brief = models.TextField(verbose_name="我将学到哪些内容")
     career_improvement = models.TextField(verbose_name="此项目如何有助于我的职业生涯")
