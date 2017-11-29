@@ -9,10 +9,22 @@ from repository import models
 class CourseSerialize(serializers.ModelSerializer):
     """课程序列化"""
     level = serializers.CharField(source='get_level_display')
+    price_policies = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Course
-        fields = ['pk', 'name', 'brief', 'level', 'course_img']
+        fields = ['pk', 'name', 'brief', 'level', 'course_img','price_policies']
+
+    def get_price_policies(self, obj):
+        policies = obj.price_policy.all()
+        ret = []
+        for i in policies:
+            d = {}
+            d['pk'] = i.pk
+            d['valid_period'] = i.get_valid_period_display()
+            d['price'] = i.price
+            ret.append(d)
+        return ret
 
 
 class CourseDetailSerialize(serializers.ModelSerializer):
@@ -28,7 +40,7 @@ class CourseDetailSerialize(serializers.ModelSerializer):
 
     class Meta:
         model = models.CourseDetail
-        fields = ['name', 'course_slogan', 'level', 'hours',
+        fields = ['pk','name', 'course_slogan', 'level', 'hours',
                   'video_brief_link', 'summary', 'why_study',
                   'what_to_study_brief', 'career_improvement',
                   'prerequisite', 'recommend_courses', 'teachers',
