@@ -9,7 +9,7 @@ def login(request):
         username = request.POST.get("username")
         pwd = request.POST.get("pwd")
         # print("___cookie",request.COOKIES)
-        obj = repository_models.User.objects.filter(username=username, password=pwd).first()
+        obj = repository_models.Account.objects.filter(username=username, password=pwd).first()
         if obj:
             # 初始化权限
             request.session["user_info"] = {"nid": obj.id}

@@ -15,3 +15,13 @@ sites.site.register(models.CourseChapter)
 sites.site.register(models.Teacher)
 sites.site.register(models.PricePolicy)#需配置
 sites.site.register(models.CourseSection)
+
+
+sites.site.register(models.CourseReview)
+sites.site.register(models.Coupon)
+sites.site.register(models.CouponRecord)
+sites.site.register(models.Order)
+sites.site.register(models.OrderDetail)
+sites.site.register(models.Account)
+sites.site.register(models.TransactionRecord)
+
