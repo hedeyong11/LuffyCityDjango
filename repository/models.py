@@ -83,7 +83,7 @@ class Course(models.Model):
     course_type = models.SmallIntegerField(choices=course_type_choices)
     degree_course = models.ForeignKey("DegreeCourse", blank=True, null=True, help_text="若是学位课程，此处关联学位表")
 
-    brief = models.TextField(verbose_name="课程概述", max_length=2048,null=True,blank=True)
+    brief = models.TextField(verbose_name="课程简介", max_length=2048,null=True,blank=True)
     level_choices = ((0, '初级'), (1, '中级'), (2, '高级'))
     level = models.SmallIntegerField(choices=level_choices, default=1)
     pub_date = models.DateField(verbose_name="发布日期", blank=True, null=True)
@@ -96,6 +96,9 @@ class Course(models.Model):
     coupon = GenericRelation("Coupon")
     # 用于GenericForeignKey反向查询，不会生成表字段，切勿删除
     price_policy = GenericRelation("PricePolicy")
+
+    # 用于GenericForeignKey反向查询，不会生成表字段，切勿删除 #add by yang
+    questions = GenericRelation("OftenAskedQuestion")
 
     def __str__(self):
         return "%s(%s)" % (self.name, self.get_course_type_display())
@@ -114,6 +117,7 @@ class CourseDetail(models.Model):
     course_slogan = models.CharField('课程口号',max_length=125, blank=True, null=True)
     video_brief_link = models.CharField(verbose_name='课程介绍(视频id用来生成链接)', max_length=255,
                                         blank=True, null=True)
+    summary = models.TextField(verbose_name="课程概述",null=True,blank=True) #add by yang
     why_study = models.TextField(verbose_name="为什么学习这门课程")
     what_to_study_brief = models.TextField(verbose_name="我将学到哪些内容")
     career_improvement = models.TextField(verbose_name="此项目如何有助于我的职业生涯")
@@ -895,6 +899,7 @@ class Account(models.Model):
 
     memo = models.TextField('备注', blank=True, null=True, default=None)
     date_joined = models.DateTimeField(auto_now_add=True, verbose_name="注册时间")
+    roles=models.ManyToManyField(to=Role,verbose_name='rbac角色')# 指的是rbac角色 add by yang
 
     class Meta:
         verbose_name = '账户信息'
@@ -946,6 +951,7 @@ class City(models.Model):
 class Industry(models.Model):
     """
     行业表
+ 
     """
     code = models.IntegerField(verbose_name="行业代码", unique=True)
     name = models.CharField(max_length=64, verbose_name="行业名称")
@@ -997,7 +1003,7 @@ class Feedback(models.Model):
 
 # ---------------------------add by yang-----------------------------
 class Token(models.Model):
-    user = models.ForeignKey("User",verbose_name="用户")
+    user = models.ForeignKey("Account",verbose_name="用户")
     tk = models.CharField("token",max_length=64)
 
 class User(models.Model):
