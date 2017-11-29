@@ -12,22 +12,22 @@ from .utils.serialize import CourseSerialize
 class AuthView(APIView):
     parser_classes = [JSONParser, ]
 
-    def post(self,request,*args,**kwargs):
+    def post(self, request, *args, **kwargs):
         print(request.data)
-        response = {"status":True,"msg":None,"code":1000}
+        response = {"status": True, "msg": None, "code": 1000}
         username = request.data.get("username")
         password = request.data.get("password")
         # password = common.hash_str(username,password)
-        user_obj = models.User.objects.filter(username=username,password=password).first()
+        user_obj = models.User.objects.filter(username=username, password=password).first()
         if not user_obj:
-            response['status']=False
-            response['msg']="用户名或密码错误"
-            response['code']=1001
+            response['status'] = False
+            response['msg'] = "用户名或密码错误"
+            response['code'] = 1001
         else:
-            tk = common.hash_str(username,time.time())
-            models.Token.objects.update_or_create(user=user_obj, defaults={"tk":tk})
-            response['token']=tk
-            response['username']=username
+            tk = common.hash_str(username, time.time())
+            models.Token.objects.update_or_create(user=user_obj, defaults={"tk": tk})
+            response['token'] = tk
+            response['username'] = username
 
         # response['Access-Control-Allow-Headers'] = "Content-Type,application/json"
         # import json
@@ -56,10 +56,9 @@ def test(request):
 
 
 class CourseView(APIView):
-
-    def get(self,request,*args,**kwargs):
+    def get(self, request, *args, **kwargs):
         course_list = models.Course.objects.all()
-        ser = CourseSerialize(instance=course_list,many=True,context={'request': request})
+        ser = CourseSerialize(instance=course_list, many=True, context={'request': request})
         # print(ser.data)
         return Response(ser.data)
 
@@ -70,7 +69,3 @@ class CourseDetailView(APIView):
         course_obj = models.Course.objects.filter(pk=pk).first()
         course_detail_obj = course_obj.coursedetail
         # print(course_detail_obj)
-
-
-
-
