@@ -24,7 +24,7 @@ urlpatterns = [
     url(r'^api/', include('api.urls')),
 
     # url(r'^api/(?P<version>\w+)/auth/$', views.AuthView.as_view()),
-    # url(r'^test/', views.test),
+    url(r'^test/', mentor_views.test),
     url(r'^admin/login/$', mentor_views.login),
     url(r'^admin/logout/$', mentor_views.logout),
     url(r'^admin/index/$', mentor_views.index),

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rbac.apps.RbacConfig',
     'mentor.apps.MentorConfig',
     'api.apps.ApiConfig',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -156,4 +157,30 @@ RBAC_PERMISSION_MSG = "无权限访问"
 MENU_ICONS = ["icon-book", "icon-book", "icon-book", "icon-book", "icon-book"]
 # ############################## RBAC权限相关配置结束 ##############################
 
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://192.168.16.99:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "CONNECTION_POOL_KWARGS": {"max_connections": 20}
+        }
+    }
+}
+
+LUFFY_CART = "luffy_cart" #redis中购物车对应的name值
+
+REST_FRAMEWORK = {
+    "DEFAULT_VERSIONING_CLASS": "rest_framework.versioning.URLPathVersioning",
+    "VERSION_PARAM": "version",
+    "DEFAULT_VERSION": 'v1',
+    "ALLOWED_VERSIONS": ['v1', 'v2'],
+
+    "UNAUTHENTICATED_USER": None,
+    "UNAUTHENTICATED_TOKEN": None,
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        # "app01.views.CustomAuthentication",
+    ]
+
+}
 

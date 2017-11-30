@@ -70,7 +70,6 @@ class Scholarship(models.Model):
     def __str__(self):
         return "%s:%s" % (self.degree_course, self.value)
 
-
 class Course(models.Model):
     """课程"""
     name = models.CharField('课程名称',max_length=128, unique=True)
@@ -526,7 +525,7 @@ class Coupon(models.Model):
     brief = models.TextField(blank=True, null=True, verbose_name="优惠券介绍")
     coupon_type_choices = ((0, '通用券'), (1, '满减券'), (2, '折扣券'))
     coupon_type = models.SmallIntegerField(choices=coupon_type_choices, default=0, verbose_name="券类型")
-    money_equivalent_value = models.IntegerField(verbose_name="等值货币")
+    money_equivalent_value = models.IntegerField(verbose_name="等值货币",null=True,blank=True,help_text='折扣券时,此字段不写')
     off_percent = models.PositiveSmallIntegerField("折扣百分比", help_text="只针对折扣券，例7.9折，写79", blank=True, null=True)
     minimum_consume = models.PositiveIntegerField("最低消费", default=0, help_text="仅在满减券时填写此字段")
 

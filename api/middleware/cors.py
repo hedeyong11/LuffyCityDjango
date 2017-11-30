@@ -1,5 +1,6 @@
 # coding:utf-8
 # Created by yang
+from django.shortcuts import HttpResponse
 class MiddlewareMixin(object):
     def __init__(self, get_response=None):
         self.get_response = get_response
@@ -21,3 +22,8 @@ class CorsMiddleware(MiddlewareMixin):
         response['Access-Control-Allow-Origin'] = "*"
         response['Access-Control-Allow-Headers'] = "Content-Type,application/json"
         return response
+
+    def process_request(self,request):
+        """option方式直接返回,因为option方法不带来token,会导致认证失败"""
+        if request.method=="OPTIONS":
+            return HttpResponse()
