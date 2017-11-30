@@ -422,3 +422,6 @@ class SettlementView(APIView):
                 return False
 
         return True  # 该优惠券信息正常
+
+    def xxx(self):
+        pass
